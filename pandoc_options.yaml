@@ -1,0 +1,735 @@
+options:
+  - name: "output"
+    cli: ["-o", "--output"]
+    type: "file"
+    default: null
+    description: "Указывает выходной файл. Без этого параметра результат выводится в stdout."
+    category: "general"
+    popularity: 5
+    gui_hint: "output_file"
+
+  - name: "standalone"
+    cli: ["-s", "--standalone"]
+    type: "boolean"
+    default: false
+    description: "Создаёт полный документ (с заголовком, мета-тегами), а не фрагмент."
+    category: "general"
+    popularity: 5
+    gui_hint: "checkbox"
+
+  - name: "from"
+    cli: ["-f", "--from"]
+    type: "string"
+    default: "auto"
+    description: "Формат входного файла. Если не указан, определяется по расширению."
+    category: "general"
+    popularity: 5
+    gui_hint: "combobox"
+    choices_from: "input_formats"
+
+  - name: "to"
+    cli: ["-t", "--to"]
+    type: "string"
+    default: "markdown"
+    description: "Формат выходного файла. По умолчанию — html, если не указано иное."
+    category: "general"
+    popularity: 5
+    gui_hint: "combobox"
+    choices_from: "output_formats"
+
+  - name: "data_dir"
+    cli: ["--data-dir"]
+    type: "directory"
+    default: null
+    description: "Каталог с пользовательскими данными (шаблоны, фильтры, CSL и т.д.)."
+    category: "general"
+    popularity: 2
+    gui_hint: "directory"
+
+  - name: "defaults"
+    cli: ["-d", "--defaults"]
+    type: "file"
+    default: null
+    description: "YAML-файл с набором настроек по умолчанию."
+    category: "general"
+    popularity: 3
+    gui_hint: "file"
+
+  - name: "bash_completion"
+    cli: ["--bash-completion"]
+    type: "boolean"
+    default: false
+    description: "Выводит скрипт автодополнения для bash (технический параметр)."
+    category: "general"
+    popularity: 1
+    gui_hint: "hidden"
+
+  - name: "verbosity"
+    cli: ["--verbosity"]
+    type: "string"
+    default: "WARNING"
+    description: "Уровень детализации: ERROR, WARNING, INFO."
+    category: "general"
+    popularity: 2
+    gui_hint: "combobox"
+    choices: ["ERROR", "WARNING", "INFO"]
+
+  - name: "fail_if_warnings"
+    cli: ["--fail-if-warnings"]
+    type: "boolean"
+    default: false
+    description: "Прерывает выполнение при любом предупреждении (полезно для CI/CD)."
+    category: "general"
+    popularity: 4
+    gui_hint: "checkbox"
+
+  - name: "dump_args"
+    cli: ["--dump-args"]
+    type: "boolean"
+    default: false
+    description: "Выводит все аргументы командной строки и завершает работу."
+    category: "general"
+    popularity: 1
+    gui_hint: "hidden"
+
+  - name: "ignore_args"
+    cli: ["--ignore-args"]
+    type: "boolean"
+    default: false
+    description: "Игнорирует все аргументы после --ignore-args."
+    category: "general"
+    popularity: 1
+    gui_hint: "hidden"
+
+  - name: "base_header_level"
+    cli: ["--base-header-level"]
+    type: "integer"
+    default: null
+    description: "Уровень заголовка, с которого начинать нумерацию (например, чтобы H1 стал H2)."
+    category: "reader"
+    popularity: 2
+    gui_hint: "spinbox"
+    min: 1
+    max: 6
+
+  - name: "shift-heading-level-by"
+    cli: ["--shift-heading-level-by"]
+    type: "integer"
+    default: 0
+    description: "Смещает уровень всех заголовков на указанное число (положительное или отрицательное)."
+    category: "reader"
+    popularity: 3
+    gui_hint: "spinbox"
+    min: -5
+    max: 5
+
+  - name: "track_changes"
+    cli: ["--track-changes"]
+    type: "string"
+    default: "reject"
+    description: "Как обрабатывать изменения в docx: 'accept', 'reject' или 'all'."
+    category: "reader"
+    popularity: 2
+    gui_hint: "combobox"
+    choices: ["accept", "reject", "all"]
+
+  - name: "extract_media"
+    cli: ["--extract-media"]
+    type: "directory"
+    default: null
+    description: "Извлекает встроенные медиафайлы (изображения, аудио) в указанный каталог."
+    category: "reader"
+    popularity: 2
+    gui_hint: "directory"
+
+  - name: "file_scope"
+    cli: ["--file-scope"]
+    type: "boolean"
+    default: false
+    description: "Обрабатывает каждый входной файл отдельно, а не как единый документ."
+    category: "reader"
+    popularity: 2
+    gui_hint: "checkbox"
+
+  - name: "strip_empty_paragraphs"
+    cli: ["--strip-empty-paragraphs"]
+    type: "boolean"
+    default: false
+    description: "Удаляет пустые параграфы при чтении (актуально для docx, HTML)."
+    category: "reader"
+    popularity: 1
+    gui_hint: "checkbox"
+
+  - name: "indented_code_classes"
+    cli: ["--indented-code-classes"]
+    type: "string"
+    default: null
+    description: "CSS-классы для отступных блоков кода в Markdown (через запятую)."
+    category: "reader"
+    popularity: 1
+    gui_hint: "entry"
+
+  - name: "markdown-headings"
+    cli: ["--markdown-headings"]
+    type: "string"
+    default: "atx"
+    description: "Стиль заголовков в Markdown: 'atx' (# Заголовок) или 'setext' (подчёркивание)."
+    category: "reader"
+    popularity: 3
+    gui_hint: "combobox"
+    choices: ["atx", "setext"]
+
+  - name: "atx-headers"
+    cli: ["--atx-headers"]
+    type: "boolean"
+    default: false
+    description: "Использовать заголовки в стиле ATX (# Заголовок) при выводе Markdown. Устаревший, но поддерживается."
+    category: "reader"
+    popularity: 2
+    gui_hint: "checkbox"
+
+  - name: "wrap"
+    cli: ["--wrap"]
+    type: "string"
+    default: "none"
+    description: "Управляет переносом строк в текстовом выводе: auto — по ширине, none — без переносов, preserve — как в исходнике."
+    category: "reader"
+    popularity: 4
+    gui_hint: "combobox"
+    choices: ["auto", "none", "preserve"]
+
+  - name: "columns"
+    cli: ["--columns"]
+    type: "integer"
+    default: null
+    description: "Ширина строки в символах для переноса текста (--wrap=auto)."
+    category: "reader"
+    popularity: 3
+    gui_hint: "spinbox"
+    min: 20
+    max: 200
+
+  - name: "tab-stop"
+    cli: ["--tab-stop"]
+    type: "integer"
+    default: null
+    description: "Количество пробелов для табуляции при чтении Markdown."
+    category: "reader"
+    popularity: 1
+    gui_hint: "spinbox"
+    min: 1
+    max: 16
+
+  - name: "toc"
+    cli: ["--toc", "--table-of-contents"]
+    type: "boolean"
+    default: false
+    description: "Добавляет оглавление в начало документа (если поддерживается форматом вывода)."
+    category: "writer"
+    popularity: 4
+    gui_hint: "checkbox"
+
+  - name: "toc-depth"
+    cli: ["--toc-depth"]
+    type: "integer"
+    default: null
+    description: "Максимальный уровень заголовков, включаемых в оглавление (по умолчанию — 3)."
+    category: "writer"
+    popularity: 3
+    gui_hint: "spinbox"
+    min: 1
+    max: 6
+
+  - name: "number-sections"
+    cli: ["--number-sections"]
+    type: "boolean"
+    default: false
+    description: "Нумерует заголовки (1, 1.1, 1.2 и т.д.)."
+    category: "writer"
+    popularity: 4
+    gui_hint: "checkbox"
+
+  - name: "number-offset"
+    cli: ["--number-offset"]
+    type: "string"
+    default: "0"
+    description: "Смещение нумерации разделов (например, '1.2' — начинать с главы 1, раздела 2)."
+    category: "writer"
+    popularity: 2
+    gui_hint: "entry"
+
+  - name: "top-level-division"
+    cli: ["--top-level-division"]
+    type: "string"
+    default: "default"
+    description: "Как интерпретировать заголовки верхнего уровня: как 'section', 'chapter' или 'part'."
+    category: "writer"
+    popularity: 2
+    gui_hint: "combobox"
+    choices: ["default", "section", "chapter", "part"]
+
+  - name: "template"
+    cli: ["--template"]
+    type: "file"
+    default: null
+    description: "Использует указанный файл шаблона вместо встроенного."
+    category: "writer"
+    popularity: 2
+    gui_hint: "file"
+
+  - name: "variable"
+    cli: ["-V", "--variable"]
+    type: "key-value"
+    default: {}
+    description: "Передаёт переменную в шаблон (например, lang=ru, fontsize=12pt)."
+    category: "writer"
+    popularity: 3
+    gui_hint: "key_value_list"
+
+  - name: "metadata"
+    cli: ["-M", "--metadata"]
+    type: "key-value"
+    default: {}
+    description: "Добавляет метаданные к документу (title, author и т.д.)."
+    category: "writer"
+    popularity: 3
+    gui_hint: "key_value_list"
+
+  - name: "metadata-file"
+    cli: ["--metadata-file"]
+    type: "file"
+    default: null
+    description: "YAML- или JSON-файл с метаданными документа."
+    category: "writer"
+    popularity: 3
+    gui_hint: "file"
+
+  - name: "self-contained"
+    cli: ["--self-contained"]
+    type: "boolean"
+    default: false
+    description: "Встраивает все внешние ресурсы (изображения, CSS, JS) в HTML-файл."
+    category: "writer"
+    popularity: 3
+    gui_hint: "checkbox"
+
+  - name: "highlight-style"
+    cli: ["--highlight-style"]
+    type: "string"
+    default: "pygments"
+    description: "Стиль подсветки синтаксиса кода. Поддерживает встроенные темы или путь к файлу."
+    category: "writer"
+    popularity: 3
+    gui_hint: "combobox"
+    choices: ["pygments", "kate", "monochrome", "espresso", "zenburn", "haddock", "tango", "breezedark", "arrow"]
+
+  - name: "ascii"
+    cli: ["--ascii"]
+    type: "boolean"
+    default: false
+    description: "Экранирует не-ASCII символы (например, в HTML-сущности)."
+    category: "writer"
+    popularity: 1
+    gui_hint: "checkbox"
+
+  - name: "reference-links"
+    cli: ["--reference-links"]
+    type: "boolean"
+    default: false
+    description: "Использует ссылки в стиле Markdown с отсылками [link][1] в конце документа."
+    category: "writer"
+    popularity: 2
+    gui_hint: "checkbox"
+
+  - name: "reference-location"
+    cli: ["--reference-location"]
+    type: "string"
+    default: "block"
+    description: "Где размещать ссылки при использовании --reference-links."
+    category: "writer"
+    popularity: 1
+    gui_hint: "combobox"
+    choices: ["block", "section", "document"]
+
+  - name: "request-header"
+    cli: ["--request-header"]
+    type: "key-value"
+    default: {}
+    description: "Добавляет HTTP-заголовок при загрузке содержимого по URL (например, User-Agent)."
+    category: "writer"
+    popularity: 1
+    gui_hint: "key_value_list"
+
+  - name: "resource-path"
+    cli: ["--resource-path"]
+    type: "path-list"
+    default: []
+    description: "Список путей, в которых искать изображения и другие ресурсы."
+    category: "writer"
+    popularity: 2
+    gui_hint: "path_list"
+
+  # === PDF-specific ===
+  - name: "pdf-engine"
+    cli: ["--pdf-engine"]
+    type: "string"
+    default: null
+    description: "Программа для генерации PDF из промежуточного формата (pdflatex, xelatex, lualatex, wkhtmltopdf, weasyprint и др.)."
+    category: "pdf"
+    popularity: 4
+    gui_hint: "combobox"
+    choices: ["pdflatatex", "xelatex", "lualatex", "wkhtmltopdf", "weasyprint", "prince", "pagedjs-cli"]
+
+  - name: "pdf-engine-opt"
+    cli: ["--pdf-engine-opt"]
+    type: "string"
+    default: null
+    description: "Дополнительные аргументы для PDF-движка (например, --pdf-engine-opt=--no-stop-on-error)."
+    category: "pdf"
+    popularity: 2
+    gui_hint: "entry"
+
+  # === HTML-specific ===
+  - name: "css"
+    cli: ["--css"]
+    type: "file"
+    default: null
+    description: "Файл CSS для стилизации HTML-документа."
+    category: "html"
+    popularity: 3
+    gui_hint: "file"
+
+  - name: "embed-resources"
+    cli: ["--embed-resources"]
+    type: "boolean"
+    default: false
+    description: "Встраивает изображения, шрифты и другие ресурсы в HTML как data: URI (аналог --self-contained, но для современных движков)."
+    category: "html"
+    popularity: 2
+    gui_hint: "checkbox"
+
+  - name: "html-q-tags"
+    cli: ["--html-q-tags"]
+    type: "boolean"
+    default: false
+    description: "Использует теги <q> для коротких цитат вместо кавычек."
+    category: "html"
+    popularity: 1
+    gui_hint: "checkbox"
+
+  # === docx / odt ===
+  - name: "reference-doc"
+    cli: ["--reference-doc"]
+    type: "file"
+    default: null
+    description: "Файл-образец (docx или odt), определяющий стили документа."
+    category: "docx-odt"
+    popularity: 3
+    gui_hint: "file"
+
+  - name: "custom-style"
+    cli: ["--custom-style"]
+    type: "string"
+    default: null
+    description: "Применяет пользовательский стиль из reference-doc к блоку."
+    category: "docx-odt"
+    popularity: 1
+    gui_hint: "entry"
+
+  # === EPUB ===
+  - name: "epub-subdirectory"
+    cli: ["--epub-subdirectory"]
+    type: "string"
+    default: "EPUB"
+    description: "Имя подкаталога внутри EPUB-архива (по умолчанию — EPUB)."
+    category: "epub"
+    popularity: 1
+    gui_hint: "entry"
+
+  - name: "epub-cover-image"
+    cli: ["--epub-cover-image"]
+    type: "file"
+    default: null
+    description: "Изображение обложки для EPUB-книги."
+    category: "epub"
+    popularity: 2
+    gui_hint: "file"
+
+  - name: "epub-metadata"
+    cli: ["--epub-metadata"]
+    type: "file"
+    default: null
+    description: "XML-файл с расширенными метаданными EPUB (DC и OPF)."
+    category: "epub"
+    popularity: 1
+    gui_hint: "file"
+
+  - name: "epub-embed-font"
+    cli: ["--epub-embed-font"]
+    type: "file-list"
+    default: []
+    description: "Шрифты, встраиваемые в EPUB-файл (TTF, OTF)."
+    category: "epub"
+    popularity: 2
+    gui_hint: "file_list"
+
+  # === LaTeX ===
+  - name: "latex-engine"
+    cli: ["--latex-engine"]
+    type: "string"
+    default: "pdflatex"
+    description: "Устаревшее. Используйте --pdf-engine вместо этого."
+    category: "latex"
+    popularity: 1
+    gui_hint: "hidden"
+
+  - name: "listings"
+    cli: ["--listings"]
+    type: "boolean"
+    default: false
+    description: "Использует пакет listings вместо fancyvrb для подсветки кода в LaTeX."
+    category: "latex"
+    popularity: 2
+    gui_hint: "checkbox"
+
+  # === RTF ===
+  - name: "reference-rtf"
+    cli: ["--reference-rtf"]
+    type: "file"
+    default: null
+    description: "Файл RTF с пользовательскими стилями для вывода."
+    category: "rtf"
+    popularity: 1
+    gui_hint: "file"
+
+  # === Markdown writer ===
+  - name: "markdown-headings"
+    cli: ["--markdown-headings"]
+    type: "string"
+    default: "atx"
+    description: "Стиль заголовков при выводе в Markdown: 'atx' (# Заголовок) или 'setext' (подчёркивание)."
+    category: "markdown-writer"
+    popularity: 3
+    gui_hint: "combobox"
+    choices: ["atx", "setext"]
+
+  - name: "atx-headers"
+    cli: ["--atx-headers"]
+    type: "boolean"
+    default: false
+    description: "Эквивалент --markdown-headings=atx. Устаревший, но поддерживается."
+    category: "markdown-writer"
+    popularity: 2
+    gui_hint: "checkbox"
+
+  # === Общие для нескольких форматов ===
+  - name: "dpi"
+    cli: ["--dpi"]
+    type: "integer"
+    default: null
+    description: "Разрешение в DPI для изображений при генерации PDF через wkhtmltopdf или ms."
+    category: "output"
+    popularity: 1
+    gui_hint: "spinbox"
+    min: 72
+    max: 600
+
+  - name: "citeproc"
+    cli: ["--citeproc"]
+    type: "boolean"
+    default: false
+    description: "Включает встроенный процессор цитирований (citeproc) для автоматического оформления ссылок и списка литературы."
+    category: "citations"
+    popularity: 4
+    gui_hint: "checkbox"
+
+  - name: "bibliography"
+    cli: ["--bibliography"]
+    type: "file-list"
+    default: null
+    description: "Файл(ы) с библиографией в формате BibTeX (.bib), CSL JSON (.json) или YAML."
+    category: "citations"
+    popularity: 4
+    gui_hint: "file_list"
+
+  - name: "csl"
+    cli: ["--csl"]
+    type: "file"
+    default: null
+    description: "Файл стиля цитирования (CSL), например apa.csl, ieee.csl или gost-r-7-0-5-2008.csl."
+    category: "citations"
+    popularity: 4
+    gui_hint: "file"
+
+  - name: "citation-abbreviations"
+    cli: ["--citation-abbreviations"]
+    type: "file"
+    default: null
+    description: "JSON-файл с сокращениями для журналов и издателей (используется с --citeproc)."
+    category: "citations"
+    popularity: 2
+    gui_hint: "file"
+
+  - name: "natbib"
+    cli: ["--natbib"]
+    type: "boolean"
+    default: false
+    description: "Использует пакет natbib в LaTeX для оформления ссылок (только для вывода в LaTeX/PDF)."
+    category: "citations"
+    popularity: 2
+    gui_hint: "checkbox"
+
+  - name: "biblatex"
+    cli: ["--biblatex"]
+    type: "boolean"
+    default: false
+    description: "Использует пакет biblatex в LaTeX вместо bibtex (только для вывода в LaTeX/PDF)."
+    category: "citations"
+    popularity: 2
+    gui_hint: "checkbox"
+
+  - name: "cite-method"
+    cli: ["--cite-method"]
+    type: "string"
+    default: "citeproc"
+    description: "Метод обработки цитирований для LaTeX: citeproc, natbib или biblatex."
+    category: "citations"
+    popularity: 2
+    gui_hint: "combobox"
+    choices: ["citeproc", "natbib", "biblatex"]
+
+  - name: "html-math-method"
+    cli: ["--html-math-method"]
+    type: "string"
+    default: "plain"
+    description: "Метод отображения формул в HTML: plain (без обработки), mathjax, katex, gladtex, webtex, or mml (MathML)."
+    category: "math-html"
+    popularity: 3
+    gui_hint: "combobox"
+    choices: ["plain", "mathjax", "katex", "gladtex", "webtex", "mml"]
+
+  - name: "webtex"
+    cli: ["--webtex"]
+    type: "string"
+    default: null
+    description: "URL сервиса для рендеринга формул как изображений (например, https://latex.codecogs.com/png.latex?). Используется с --html-math-method=webtex."
+    category: "math-html"
+    popularity: 1
+    gui_hint: "entry"
+
+  - name: "mathjax"
+    cli: ["--mathjax"]
+    type: "string"
+    default: "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+    description: "URL к MathJax. Если указан, эквивалентно --html-math-method=mathjax с этим URL."
+    category: "math-html"
+    popularity: 3
+    gui_hint: "entry"
+
+  - name: "katex"
+    cli: ["--katex"]
+    type: "string"
+    default: null
+    description: "Путь к локальной папке KaTeX или URL. Эквивалентно --html-math-method=katex."
+    category: "math-html"
+    popularity: 2
+    gui_hint: "file_or_url"
+
+  - name: "print-default-data-file"
+    cli: ["--print-default-data-file"]
+    type: "string"
+    default: null
+    description: "Выводит содержимое встроенного файла из директории данных (например, шаблонов, фильтров)."
+    category: "wrapper"
+    popularity: 1
+    gui_hint: "entry"
+
+  - name: "print-default-template"
+    cli: ["--print-default-template"]
+    type: "string"
+    default: null
+    description: "Устаревший. Используйте --print-default-data-file=templates/default.FORMAT."
+    category: "wrapper"
+    popularity: 1
+    gui_hint: "hidden"
+
+  - name: "print-highlight-style"
+    cli: ["--print-highlight-style"]
+    type: "string"
+    default: null
+    description: "Выводит XML-представление указанного стиля подсветки (для создания собственных тем)."
+    category: "wrapper"
+    popularity: 1
+    gui_hint: "entry"
+
+  - name: "print-highlight-languages"
+    cli: ["--print-highlight-languages"]
+    type: "boolean"
+    default: false
+    description: "Список языков, поддерживаемых встроенной подсветкой синтаксиса."
+    category: "wrapper"
+    popularity: 1
+    gui_hint: "hidden"
+
+  - name: "list-input-formats"
+    cli: ["--list-input-formats"]
+    type: "boolean"
+    default: false
+    description: "Выводит список поддерживаемых входных форматов и завершает работу."
+    category: "wrapper"
+    popularity: 2
+    gui_hint: "hidden"
+
+  - name: "list-output-formats"
+    cli: ["--list-output-formats"]
+    type: "boolean"
+    default: false
+    description: "Выводит список поддерживаемых выходных форматов и завершает работу."
+    category: "wrapper"
+    popularity: 2
+    gui_hint: "hidden"
+
+  - name: "list-extensions"
+    cli: ["--list-extensions"]
+    type: "string"
+    default: null
+    description: "Список расширений Markdown для указанного формата (например, --list-extensions=markdown)."
+    category: "wrapper"
+    popularity: 2
+    gui_hint: "entry"
+
+  - name: "list-highlight-languages"
+    cli: ["--list-highlight-languages"]
+    type: "boolean"
+    default: false
+    description: "Синоним для --print-highlight-languages (устаревший)."
+    category: "wrapper"
+    popularity: 1
+    gui_hint: "hidden"
+
+  - name: "list-highlight-styles"
+    cli: ["--list-highlight-styles"]
+    type: "boolean"
+    default: false
+    description: "Список встроенных стилей подсветки синтаксиса."
+    category: "wrapper"
+    popularity: 1
+    gui_hint: "hidden"
+
+  - name: "version"
+    cli: ["--version"]
+    type: "boolean"
+    default: false
+    description: "Показывает версию Pandoc и информацию о сборке."
+    category: "wrapper"
+    popularity: 1
+    gui_hint: "hidden"
+
+  - name: "help"
+    cli: ["--help", "-h"]
+    type: "boolean"
+    default: false
+    description: "Показывает справку по командной строке."
+    category: "wrapper"
+    popularity: 1
+    gui_hint: "hidden"
