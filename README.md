@@ -1,93 +1,83 @@
 **Pandoc GUI from YAML**
 
-Графический интерфейс для утилиты командной строки Pandoc --- мощного конвертера документов между различными форматами разметки и офисными форматами.
+A graphical user interface for the Pandoc command-line utility, a powerful document converter between various markup and office file formats.
 
-**Описание**
+**Description**
 
-Pandoc GUI from YAML — это приложение на Python с использованием библиотеки Tkinter, которое упрощает работу с Pandoc, позволяя настраивать параметры конвертации через удобный визуальный интерфейс, не прибегая к запоминанию сложных команд.
+Pandoc GUI from YAML is a Python application built with the Tkinter library that simplifies working with Pandoc by allowing users to configure conversion options through an intuitive visual interface—without memorizing complex command-line syntax.
 
-- Визуальная настройка параметров Pandoc без необходимости помнить синтаксис командной строки.
-- Автоматическое определение входного формата (--from) по расширению входного файла (например, .docx → docx, .md → markdown).
-- Динамическое формирование имени выходного файла рядом с исходным, с правильным расширением в зависимости от выбранного выходного формата (--to).
-- Фильтрация параметров по уровню популярности (от 1 до 5) — по умолчанию отображаются только наиболее востребованные (popularity ≥ 4).
-- Поле команды полностью редактируемо: при запуске выполняется именно то, что отображается в поле.
-- Редактирование итоговой команды вручную --- при запуске выполнится именно то, что отображается.
-- Автоматическое обновление команды при изменении параметров.
-- Прокрутка колёсиком мыши работает только внутри блока параметров — выбор файла и командная строка остаются всегда видимыми.
-- Полная поддержка всех опций Pandoc через файл конфигурации pandoc_options.yaml.py.
-- Поддержка всех форматов: Markdown, HTML, LaTeX, Word (.docx), EPUB, PDF, Jupyter Notebook и др.
-
+- Visually configure Pandoc options without needing to recall command-line syntax.
+- Automatically detect the input format (--from) based on the input file extension (e.g., .docx → docx, .md → markdown).
+- Dynamically generate the output filename next to the source file, with the correct extension based on the selected output format (--to).
+- Filter options by popularity level (1 to 5); by default, only the most commonly used options (popularity ≥ 4) are shown.
+- The command field is fully editable, the exact command displayed is executed upon launch.
+- Manually edit the final command before execution, whatever appears in the command field will be run.
+- The command updates automatically when any parameter changes.
+- Mouse wheel scrolling works only inside the parameters panel, file selection and the command field remain always visible.
+- Full support for all Pandoc options via the configuration file pandoc_options.yaml.
+- Supports all major formats: Markdown, HTML, LaTeX, Word (.docx), EPUB, PDF, Jupyter Notebook, and more.
 
 ------------------------------------------------------------------------
 
-**Основные возможности**
+**Key Features**
 
-- Автоматическое определение \--from по расширению входного файла.
-- Динамический выходной файл --- сохраняется рядом с исходным, с расширением согласно \--to.
-- Фильтрация параметров --- отображаются только нужные (по умолчанию: популярность ≥ 4).
-- Редактируемая команда --- можно вручную править перед запуском.
-- Полная поддержка всех опций Pandoc через файл pandoc_options.yaml.
-- Прокрутка колёсиком мыши только в блоке параметров.
-- Поддержка всех форматов: Markdown, HTML, LaTeX, Word (.docx), EPUB, PDF, Jupyter Notebook и др.
+- Automatic --from detection based on input file extension.
+- Dynamic output filename, saved alongside the source file, with an extension matching --to.
+- Parameter filtering, only relevant options shown by default (popularity ≥ 4).
+- Editable command, manual adjustments allowed before execution.
+- Complete Pandoc option coverage via pandoc_options.yaml.py.
+- Mouse wheel scrolls only the parameters section.
+- Supports all formats: Markdown, HTML, LaTeX, Word (.docx), EPUB, PDF, Jupyter Notebook, etc.
 
-**Требования**
+**Requirements**
 
-- Python 3.7+
-- Установленный [Pandoc](https://pandoc.org/installing.html) (версия 2.0+)
-- Библиотеки Python:
+- Python 3.7 or newer
+- Pandoc installed (version 2.0 or later)
+- Python dependencies:
     - pyyaml
 
 ------------------------------------------------------------------------
 
-**Структура проекта**
+**Project Structure**
 
-- 1_pandoc_download.bat                    # Скачивание официального Pandoc.exe
-- 2_python_portable_download.bat           # Скачивание портативного Python (для портативности)
-- 3_python_install_requirements.bat        # Установка зависимостей (pyyaml
-- 4_python_check_install_requirements.bat  # Проверка установленных зависимостей
-- 5_run_pandoc_gui_from_yaml.yaml          # Запуск приложения 
-- pandoc.exe                               # Бинарник Pandoc (для портативности)
-- pandoc_gui_from_yaml.py                  # Основной исполняемый файл GUI
-- pandoc_options.yaml.py                   # Файл с описанием всех параметров Pandoc (в формате Python-словаря)
-- README.md                                # Документация
+- 1_pandoc_download.bat # Downloads the official Pandoc installer
+- 2_python_portable_download.bat # Downloads portable Python (for portability)
+- 3_python_install_requirements.bat # Installs required packages (pyyaml)
+- 4_python_check_install_requirements.bat # Verifies that dependencies are installed
+- 5_run_pandoc_gui_from_yaml.yaml # Launches the application (YAML-based runner)
+- pandoc.exe # Pandoc binary (included for portability)
+- pandoc_gui_from_yaml.py # Main GUI executable
+- pandoc_options.yaml.py # Pandoc options definition (as a Python dictionary)
+- README.md # Documentation
 
-------------------------------------------------------------------------
+**How to Run**
 
-**Запуск**
+Execute the following batch files in order:
 
-Запустите последовательно:
-1. 1_pandoc_download.bat → скачать Pandoc
-2. 2_python_portable_download.bat → скачать портативную версию Python
-3. 3_python_install_requirements.bat → установит пакет pyyaml в Python
-4. 4_python_check_install_requirements.bat → убедитесь, что все необходимые пакеты установлены
-5. 5_run_pandoc_gui_from_yaml.yaml → используйте для запуска приложения.
+1. 1_pandoc_download.bat → downloads Pandoc
+2. 2_python_portable_download.bat → downloads portable Python
+3. 3_python_install_requirements.bat → installs the pyyaml package
+4. 4_python_check_install_requirements.bat → confirms all dependencies are present
+5. 5_run_pandoc_gui_from_yaml.yaml → launches the application
 
-------------------------------------------------------------------------
+**Interface**
 
-**Интерфейс**
+- Top panel: input file selection + “Popularity ≥ [1–5]” filter
+- Command field: editable with word wrap, executed when you click “Convert”
+- Scrollable parameters panel: options grouped by category (input/output, PDF, citations, metadata, etc.)
+- “Convert” button: runs the exact command shown in the command field
 
-- Верхняя панель: выбор входного файла + фильтр «Популярность ≥ [1–5]».
-- Поле команды: редактируемое, с переносом строк — выполняется при нажатии «Конвертировать».
-- Прокручиваемый блок: параметры сгруппированы по категориям (ввод/вывод, PDF, цитаты, метаданные и др.).
-- Кнопка «Конвертировать»: запускает отображаемую команду в системе.
+**Notes**
 
-------------------------------------------------------------------------
+- On first launch, only the most popular options (popularity ≥ 4) are displayed.
+- To view all options, select “1” in the “Popularity ≥” dropdown menu.
+- The command updates automatically, unless you manually edit the command field, which disables auto-updating.
+- If you change any parameter after manual editing, the command resets to the auto-generated version.
 
-**Примечания**
+**Support**
 
-- При первом запуске отображаются только наиболее популярные параметры (popularity ≥ 4).
-- Чтобы увидеть все параметры, выберите 1 в выпадающем меню «Популярность ≥».
-- Команда обновляется автоматически, но если вы начнёте редактировать её вручную, то автообновление отключится.
-- При изменении любого параметра после ручного редактирования, то команда сбросится к автоматически сгенерированной.
+This application is based on the official Pandoc documentation: [Pandoc User's Guide](https://pandoc.org/MANUAL.html)
 
-------------------------------------------------------------------------
+**License**
 
-**Поддержка**
-
-Программа использует официальную документацию Pandoc: [Pandoc User's Guide](https://pandoc.org/MANUAL.html)
-
-------------------------------------------------------------------------
-
-**Лицензия**
-
-Этот проект распространяется как есть и без ограничений. Используйте и модифицируйте его по своему усмотрению.
+This project is provided "as is" with no restrictions. Feel free to use, modify, and distribute it at your discretion.
