@@ -81,3 +81,8 @@ This application is based on the official Pandoc documentation: [Pandoc User's G
 **License**
 
 This project is provided "as is" with no restrictions. Feel free to use, modify, and distribute it at your discretion.
+
+------------------------------------------------------------------------
+
+## Contacts
+Discord server: https://discord.gg/zQf8DV4n
