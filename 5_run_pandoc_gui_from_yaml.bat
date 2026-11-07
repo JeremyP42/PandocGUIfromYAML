@@ -1,5 +1,8 @@
 @echo off
+chcp 65001 >nul
 setlocal
+
+pushd "%~dp0"
 
 set "WINPYTHON_DIR=%~dp0winpython"
 set "SCRIPT_PATH=%~dp0pandoc_gui_from_yaml.py"
@@ -48,9 +51,13 @@ if not exist "%SCRIPT_PATH%" (
 )
 
 "%PYTHON_EXE%" "%SCRIPT_PATH%"
+set "EXIT_CODE=%ERRORLEVEL%"
 
-if errorlevel 1 (
+popd
+
+if not "%EXIT_CODE%"=="0" (
     echo.
     echo Скрипт завершился с ошибкой.
     pause
 )
+exit /b %EXIT_CODE%

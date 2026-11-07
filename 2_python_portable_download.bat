@@ -2,11 +2,11 @@
 :: Устанавливаем кодировку UTF-8 для корректного отображения кириллицы
 chcp 65001 >nul
 
-setlocal 
+setlocal enabledelayedexpansion
 
 :: Настройки
-set "PYTHON_URL=https://github.com/winpython/winpython/releases/download/17.2.20251012/WinPython64-3.13.8.0dotb1.zip"
-set "ARCHIVE_NAME= WinPython64-3.13.8.0dotb1.zip"
+set "PYTHON_URL=https://github.com/winpython/winpython/releases/download/17.2.20260118/WinPython64-3.14.2.1dotb1.zip"
+set "ARCHIVE_NAME=WinPython64-3.14.2.1dotb1.zip"
 set "INSTALL_DIR=%CD%\winpython"
 
 :: Проверяем, существует ли уже установленный Python

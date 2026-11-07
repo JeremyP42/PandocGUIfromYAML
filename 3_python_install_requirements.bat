@@ -1,46 +1,43 @@
 @echo off
-:: Устанавливаем кодировку UTF-8 для корректного отображения кириллицы
-
 chcp 65001 >nul
+setlocal enabledelayedexpansion
 
-setlocal 
+set "FOUND_PYTHON="
 
-set "INSTALL_DIR=%CD%\winpython"
-set "PYTHON_EXE="
-
-:: Поиск python.exe
-echo [Поиск] Поиск установленного python.exe...
-
-for /r "%INSTALL_DIR%" %%F in (python.exe) do (
-    if exist "%%F" (
-        set "PYTHON_EXE=%%F"
-        goto :found
+for /d %%D in ("%~dp0winpython\WPy64-*") do (
+    if exist "%%D\python\python.exe" (
+        set "FOUND_PYTHON=%%D\python\python.exe"
+        goto :found_python
     )
 )
 
-:found
-if not defined PYTHON_EXE (
-    echo Ошибка: Не найден python.exe в %INSTALL_DIR%
-    echo Сначала запустите python_portable_download.bat
+:found_python
+if not defined FOUND_PYTHON (
+    echo Ошибка: python.exe не найден в winpython\WPy64-*
     pause
     exit /b 1
 )
 
-:: Проверяем наличие requirements.txt
+set "PYTHON_EXE=!FOUND_PYTHON!"
+
 if not exist "requirements.txt" (
-    echo Ошибка: Файл requirements.txt не найден в текущей директории.
+    echo Ошибка: requirements.txt не найден
     pause
     exit /b 1
 )
 
-:: Обновляем pip и устанавливаем зависимости
-echo Обновление pip...
-"%PYTHON_EXE%" -m pip install --upgrade pip
-
-echo Установка зависимостей из requirements.txt...
-"%PYTHON_EXE%" -m pip install -r requirements.txt
+echo [1/3] Очистка pip-кэша...
+"%PYTHON_EXE%" -m pip cache purge
 
 echo.
-echo Все зависимости успешно установлены!
+echo [2/3] Обновление pip...
+"%PYTHON_EXE%" -m pip install --upgrade pip --no-user --force-reinstall
+
 echo.
+echo [3/3] Установка пакетов БЕЗ кэша и БЕЗ пользовательского каталога...
+"%PYTHON_EXE%" -m pip install -r requirements.txt --no-cache-dir --no-user --force-reinstall
+
+
+echo.
+echo Готово!
 pause

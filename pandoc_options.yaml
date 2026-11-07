@@ -55,24 +55,24 @@ options:
     popularity: 3
     gui_hint: "file"
 
-  - name: "bash_completion"
-    cli: ["--bash-completion"]
-    type: "boolean"
-    default: false
-    description: "Выводит скрипт автодополнения для bash (технический параметр)."
+  - name: "completion"
+    cli: ["--completion"]
+    type: "string"
+    default: null
+    description: "Выводит скрипт автодополнения для оболочки (bash, zsh, fish). Новый параметр pandoc 3.13 вместо --bash-completion."
     category: "general"
     popularity: 1
-    gui_hint: "hidden"
+    gui_hint: "combobox"
+    choices: ["bash", "zsh", "fish"]
 
-  - name: "verbosity"
-    cli: ["--verbosity"]
-    type: "string"
-    default: "WARNING"
-    description: "Уровень детализации: ERROR, WARNING, INFO."
+  - name: "typst-input"
+    cli: ["--typst-input"]
+    type: "key-value"
+    default: {}
+    description: "Передаёт KEY=VALUE в Typst при выводе в формат typst (новый параметр pandoc 3.13)."
     category: "general"
     popularity: 2
-    gui_hint: "combobox"
-    choices: ["ERROR", "WARNING", "INFO"]
+    gui_hint: "entry"
 
   - name: "fail_if_warnings"
     cli: ["--fail-if-warnings"]
@@ -151,15 +151,6 @@ options:
     popularity: 2
     gui_hint: "checkbox"
 
-  - name: "strip_empty_paragraphs"
-    cli: ["--strip-empty-paragraphs"]
-    type: "boolean"
-    default: false
-    description: "Удаляет пустые параграфы при чтении (актуально для docx, HTML)."
-    category: "reader"
-    popularity: 1
-    gui_hint: "checkbox"
-
   - name: "indented_code_classes"
     cli: ["--indented-code-classes"]
     type: "string"
@@ -178,15 +169,6 @@ options:
     popularity: 3
     gui_hint: "combobox"
     choices: ["atx", "setext"]
-
-  - name: "atx-headers"
-    cli: ["--atx-headers"]
-    type: "boolean"
-    default: false
-    description: "Использовать заголовки в стиле ATX (# Заголовок) при выводе Markdown. Устаревший, но поддерживается."
-    category: "reader"
-    popularity: 2
-    gui_hint: "checkbox"
 
   - name: "wrap"
     cli: ["--wrap"]
@@ -304,24 +286,15 @@ options:
     popularity: 3
     gui_hint: "file"
 
-  - name: "self-contained"
-    cli: ["--self-contained"]
-    type: "boolean"
-    default: false
-    description: "Встраивает все внешние ресурсы (изображения, CSS, JS) в HTML-файл."
-    category: "writer"
-    popularity: 3
-    gui_hint: "checkbox"
-
   - name: "highlight-style"
-    cli: ["--highlight-style"]
+    cli: ["--syntax-highlighting"]
     type: "string"
     default: "pygments"
-    description: "Стиль подсветки синтаксиса кода. Поддерживает встроенные темы или путь к файлу."
+    description: "Стиль подсветки синтаксиса кода. В pandoc 3.13 параметр --highlight-style устарел и заменён на --syntax-highlighting."
     category: "writer"
     popularity: 3
     gui_hint: "combobox"
-    choices: ["pygments", "kate", "monochrome", "espresso", "zenburn", "haddock", "tango", "breezedark", "arrow"]
+    choices: ["pygments", "kate", "monochrome", "espresso", "zenburn", "haddock", "tango", "breezedark", "default", "idiomatic", "none"]
 
   - name: "ascii"
     cli: ["--ascii"]
@@ -378,7 +351,7 @@ options:
     category: "pdf"
     popularity: 4
     gui_hint: "combobox"
-    choices: ["pdflatatex", "xelatex", "lualatex", "wkhtmltopdf", "weasyprint", "prince", "pagedjs-cli"]
+    choices: ["pdflatex", "xelatex", "lualatex", "tectonic", "typst", "wkhtmltopdf", "weasyprint", "prince", "pagedjs-cli", "context", "pdfroff"]
 
   - name: "pdf-engine-opt"
     cli: ["--pdf-engine-opt"]
@@ -403,7 +376,16 @@ options:
     cli: ["--embed-resources"]
     type: "boolean"
     default: false
-    description: "Встраивает изображения, шрифты и другие ресурсы в HTML как data: URI (аналог --self-contained, но для современных движков)."
+    description: "Встраивает изображения, шрифты и другие ресурсы в HTML как data: URI (современная замена --self-contained)."
+    category: "html"
+    popularity: 3
+    gui_hint: "checkbox"
+
+  - name: "link-images"
+    cli: ["--link-images"]
+    type: "boolean"
+    default: false
+    description: "Оставляет ссылки на изображения вместо встраивания при использовании --embed-resources."
     category: "html"
     popularity: 2
     gui_hint: "checkbox"
@@ -426,15 +408,6 @@ options:
     category: "docx-odt"
     popularity: 3
     gui_hint: "file"
-
-  - name: "custom-style"
-    cli: ["--custom-style"]
-    type: "string"
-    default: null
-    description: "Применяет пользовательский стиль из reference-doc к блоку."
-    category: "docx-odt"
-    popularity: 1
-    gui_hint: "entry"
 
   # === EPUB ===
   - name: "epub-subdirectory"
@@ -474,51 +447,12 @@ options:
     gui_hint: "file_list"
 
   # === LaTeX ===
-  - name: "latex-engine"
-    cli: ["--latex-engine"]
-    type: "string"
-    default: "pdflatex"
-    description: "Устаревшее. Используйте --pdf-engine вместо этого."
-    category: "latex"
-    popularity: 1
-    gui_hint: "hidden"
-
   - name: "listings"
     cli: ["--listings"]
     type: "boolean"
     default: false
     description: "Использует пакет listings вместо fancyvrb для подсветки кода в LaTeX."
     category: "latex"
-    popularity: 2
-    gui_hint: "checkbox"
-
-  # === RTF ===
-  - name: "reference-rtf"
-    cli: ["--reference-rtf"]
-    type: "file"
-    default: null
-    description: "Файл RTF с пользовательскими стилями для вывода."
-    category: "rtf"
-    popularity: 1
-    gui_hint: "file"
-
-  # === Markdown writer ===
-  - name: "markdown-headings"
-    cli: ["--markdown-headings"]
-    type: "string"
-    default: "atx"
-    description: "Стиль заголовков при выводе в Markdown: 'atx' (# Заголовок) или 'setext' (подчёркивание)."
-    category: "markdown-writer"
-    popularity: 3
-    gui_hint: "combobox"
-    choices: ["atx", "setext"]
-
-  - name: "atx-headers"
-    cli: ["--atx-headers"]
-    type: "boolean"
-    default: false
-    description: "Эквивалент --markdown-headings=atx. Устаревший, но поддерживается."
-    category: "markdown-writer"
     popularity: 2
     gui_hint: "checkbox"
 
@@ -588,52 +522,33 @@ options:
     popularity: 2
     gui_hint: "checkbox"
 
-  - name: "cite-method"
-    cli: ["--cite-method"]
-    type: "string"
-    default: "citeproc"
-    description: "Метод обработки цитирований для LaTeX: citeproc, natbib или biblatex."
-    category: "citations"
-    popularity: 2
-    gui_hint: "combobox"
-    choices: ["citeproc", "natbib", "biblatex"]
-
-  - name: "html-math-method"
-    cli: ["--html-math-method"]
+  - name: "math-method"
+    cli: ["--math-method"]
     type: "string"
     default: "plain"
-    description: "Метод отображения формул в HTML: plain (без обработки), mathjax, katex, gladtex, webtex, or mml (MathML)."
+    description: "Метод отображения формул в HTML: plain, mathjax, katex, gladtex, webtex, mathml. Можно указать URL, например mathjax:https://... Новый параметр pandoc 3.13 вместо --html-math-method, --mathjax, --katex и --webtex."
     category: "math-html"
     popularity: 3
-    gui_hint: "combobox"
-    choices: ["plain", "mathjax", "katex", "gladtex", "webtex", "mml"]
-
-  - name: "webtex"
-    cli: ["--webtex"]
-    type: "string"
-    default: null
-    description: "URL сервиса для рендеринга формул как изображений (например, https://latex.codecogs.com/png.latex?). Используется с --html-math-method=webtex."
-    category: "math-html"
-    popularity: 1
-    gui_hint: "entry"
+    gui_hint: "editable_combobox"
+    choices: ["plain", "mathjax", "katex", "gladtex", "webtex", "mathml"]
 
   - name: "mathjax"
     cli: ["--mathjax"]
     type: "string"
-    default: "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
-    description: "URL к MathJax. Если указан, эквивалентно --html-math-method=mathjax с этим URL."
+    default: null
+    description: "Устаревший в pandoc 3.13 параметр: используйте math-method со значением mathjax:URL. Если задано, передаётся как --mathjax=URL."
     category: "math-html"
-    popularity: 3
+    popularity: 1
     gui_hint: "entry"
 
   - name: "katex"
     cli: ["--katex"]
     type: "string"
     default: null
-    description: "Путь к локальной папке KaTeX или URL. Эквивалентно --html-math-method=katex."
+    description: "Устаревший в pandoc 3.13 параметр: используйте math-method со значением katex:URL. Если задано, передаётся как --katex=URL."
     category: "math-html"
-    popularity: 2
-    gui_hint: "file_or_url"
+    popularity: 1
+    gui_hint: "entry"
 
   - name: "print-default-data-file"
     cli: ["--print-default-data-file"]
@@ -661,15 +576,6 @@ options:
     category: "wrapper"
     popularity: 1
     gui_hint: "entry"
-
-  - name: "print-highlight-languages"
-    cli: ["--print-highlight-languages"]
-    type: "boolean"
-    default: false
-    description: "Список языков, поддерживаемых встроенной подсветкой синтаксиса."
-    category: "wrapper"
-    popularity: 1
-    gui_hint: "hidden"
 
   - name: "list-input-formats"
     cli: ["--list-input-formats"]
@@ -702,7 +608,7 @@ options:
     cli: ["--list-highlight-languages"]
     type: "boolean"
     default: false
-    description: "Синоним для --print-highlight-languages (устаревший)."
+    description: "Список языков, поддерживаемых встроенной подсветкой синтаксиса."
     category: "wrapper"
     popularity: 1
     gui_hint: "hidden"
